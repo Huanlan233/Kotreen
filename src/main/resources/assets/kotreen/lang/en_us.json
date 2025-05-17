@@ -1,0 +1,11 @@
+{
+  "kotreen.command.failure.arrangement.existed": "The arrangement already exists.",
+  "kotreen.command.failure.arrangement.null": "The arrangement is null.",
+  "kotreen.command.failure.arrangement.online": "The arrangement is already online.",
+  "kotreen.command.failure.arrangement.offline": "The arrangement is offline.",
+  "kotreen.command.failure.series.existed": "The series already exists.",
+  "kotreen.command.failure.series.null": "The series is null.",
+  "kotreen.command.failure.action": "Cannot operate! Something went wrong.",
+  "kotreen.command.tooltip.description": "Description: %s",
+  "kotreen.command.tooltip.action": "Action: %s"
+}
