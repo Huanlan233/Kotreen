@@ -9,9 +9,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import top.htext.kotreen.config.Arrangement
-import top.htext.kotreen.serialization.IdentifierDeserializer
-import top.htext.kotreen.serialization.Vec2fDeserializer
-import top.htext.kotreen.serialization.Vec3dDeserializer
+import top.htext.kotreen.serialization.*
 import top.htext.kotreen.utils.ServerUtils
 
 object ArrangementCache {
@@ -23,8 +21,11 @@ object ArrangementCache {
         registerModule(
             SimpleModule()
                 .addDeserializer(Vec3d::class.java, Vec3dDeserializer())
+                .addSerializer(Vec3d::class.java, Vec3dSerializer())
                 .addDeserializer(Vec2f::class.java, Vec2fDeserializer())
+                .addSerializer(Vec2f::class.java, Vec2fSerializer())
                 .addDeserializer(Identifier::class.java, IdentifierDeserializer())
+                .addSerializer(Identifier::class.java, IdentifierSerializer())
         )
     }
 
