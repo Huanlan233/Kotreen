@@ -1,4 +1,4 @@
-package top.htext.command
+package top.htext.kotreen.command
 
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.StringArgumentType
@@ -7,12 +7,12 @@ import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.Text
-import top.htext.config.cache.ArrangementCache
-import top.htext.command.suggestion.ArrangementSuggestionProvider
-import top.htext.command.suggestion.SeriesArrangementSuggestionProvider
-import top.htext.command.suggestion.SeriesSuggestionProvider
-import top.htext.config.Series
-import top.htext.config.cache.SeriesCache
+import top.htext.kotreen.command.suggestion.ArrangementSuggestionProvider
+import top.htext.kotreen.command.suggestion.SeriesArrangementSuggestionProvider
+import top.htext.kotreen.command.suggestion.SeriesSuggestionProvider
+import top.htext.kotreen.config.Series
+import top.htext.kotreen.config.cache.ArrangementCache
+import top.htext.kotreen.config.cache.SeriesCache
 
 object SeriesCommand {
     fun register(dispatcher: CommandDispatcher<ServerCommandSource>) {

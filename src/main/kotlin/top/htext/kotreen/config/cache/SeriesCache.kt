@@ -1,15 +1,15 @@
-package top.htext.config.cache
+package top.htext.kotreen.config.cache
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
 import net.minecraft.server.MinecraftServer
-import top.htext.config.Arrangement
-import top.htext.config.Series
-import top.htext.serialization.ArrangementDeserializer
-import top.htext.serialization.ArrangementSerializer
-import top.htext.utils.ServerUtils
+import top.htext.kotreen.config.Arrangement
+import top.htext.kotreen.config.Series
+import top.htext.kotreen.serialization.ArrangementDeserializer
+import top.htext.kotreen.serialization.ArrangementSerializer
+import top.htext.kotreen.utils.ServerUtils
 
 object SeriesCache {
     private val cache = HashSet<Series>()

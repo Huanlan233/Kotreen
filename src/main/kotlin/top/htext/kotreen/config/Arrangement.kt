@@ -1,4 +1,4 @@
-package top.htext.config
+package top.htext.kotreen.config
 
 import carpet.fakes.ServerPlayerInterface
 import carpet.patches.EntityPlayerMPFake

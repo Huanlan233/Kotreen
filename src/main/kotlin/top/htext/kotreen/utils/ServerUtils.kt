@@ -1,4 +1,4 @@
-package top.htext.utils
+package top.htext.kotreen.utils
 
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.WorldSavePath

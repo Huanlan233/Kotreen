@@ -1,4 +1,4 @@
-package top.htext
+package top.htext.kotreen
 
 import carpet.CarpetExtension
 import carpet.CarpetServer
@@ -8,10 +8,10 @@ import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.command.ServerCommandSource
 import org.slf4j.LoggerFactory
-import top.htext.config.cache.ArrangementCache
-import top.htext.command.ArrangeCommand
-import top.htext.command.SeriesCommand
-import top.htext.config.cache.SeriesCache
+import top.htext.kotreen.config.cache.ArrangementCache
+import top.htext.kotreen.command.ArrangeCommand
+import top.htext.kotreen.command.SeriesCommand
+import top.htext.kotreen.config.cache.SeriesCache
 
 object Kotreen : ModInitializer, CarpetExtension {
     private val logger = LoggerFactory.getLogger("kotreen")

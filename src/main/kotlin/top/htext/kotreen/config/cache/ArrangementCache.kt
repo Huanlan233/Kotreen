@@ -1,4 +1,4 @@
-package top.htext.config.cache
+package top.htext.kotreen.config.cache
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -8,11 +8,11 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
-import top.htext.config.Arrangement
-import top.htext.serialization.IdentifierDeserializer
-import top.htext.serialization.Vec2fDeserializer
-import top.htext.serialization.Vec3dDeserializer
-import top.htext.utils.ServerUtils
+import top.htext.kotreen.config.Arrangement
+import top.htext.kotreen.serialization.IdentifierDeserializer
+import top.htext.kotreen.serialization.Vec2fDeserializer
+import top.htext.kotreen.serialization.Vec3dDeserializer
+import top.htext.kotreen.utils.ServerUtils
 
 object ArrangementCache {
     private val cache = HashSet<Arrangement>()

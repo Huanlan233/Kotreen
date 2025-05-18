@@ -1,4 +1,4 @@
-package top.htext.config
+package top.htext.kotreen.config
 
 import net.minecraft.server.MinecraftServer
 

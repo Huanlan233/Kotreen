@@ -1,4 +1,4 @@
-package top.htext.serialization
+package top.htext.kotreen.serialization
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext

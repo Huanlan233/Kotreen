@@ -17,13 +17,13 @@
 	"entrypoints": {
 		"main": [
 			{
-				"value": "top.htext.Kotreen",
+				"value": "top.htext.kotreen.Kotreen",
 				"adapter": "kotlin"
 			}
 		],
 		"client": [
 			{
-				"value": "top.htext.KotreenClient",
+				"value": "top.htext.kotreen.KotreenClient",
 				"adapter": "kotlin"
 			}
 		]

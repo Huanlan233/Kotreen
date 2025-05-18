@@ -1,4 +1,4 @@
-package top.htext
+package top.htext.kotreen
 
 import net.fabricmc.api.ClientModInitializer
 
