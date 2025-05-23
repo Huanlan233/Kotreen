@@ -16,7 +16,7 @@ class SeriesArrangementSuggestionProvider: SuggestionProvider<ServerCommandSourc
         builder: SuggestionsBuilder
     ): CompletableFuture<Suggestions> {
         val seriesName = StringArgumentType.getString(context, "series")
-        val series = SeriesCache.getSeries(seriesName) ?: return builder.buildFuture()
+        val series = SeriesCache.getInstance().getSeries(seriesName) ?: return builder.buildFuture()
         series.arrangements.forEach {
             builder.suggest(
                 it.name,

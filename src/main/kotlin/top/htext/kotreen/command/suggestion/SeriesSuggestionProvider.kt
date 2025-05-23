@@ -14,7 +14,7 @@ class SeriesSuggestionProvider: SuggestionProvider<ServerCommandSource> {
         context: CommandContext<ServerCommandSource>,
         builder: SuggestionsBuilder
     ): CompletableFuture<Suggestions> {
-        SeriesCache.getCache().forEach {
+        SeriesCache.getInstance().getCache().forEach {
             builder.suggest(
                 it.name,
                 Text.translatable("kotreen.command.tooltip.description", it.desc)

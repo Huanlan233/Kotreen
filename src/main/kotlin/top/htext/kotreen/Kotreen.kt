@@ -8,9 +8,9 @@ import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.command.ServerCommandSource
 import org.slf4j.LoggerFactory
-import top.htext.kotreen.config.cache.ArrangementCache
 import top.htext.kotreen.command.ArrangeCommand
 import top.htext.kotreen.command.SeriesCommand
+import top.htext.kotreen.config.cache.ArrangementCache
 import top.htext.kotreen.config.cache.SeriesCache
 
 object Kotreen : ModInitializer, CarpetExtension {
@@ -23,14 +23,17 @@ object Kotreen : ModInitializer, CarpetExtension {
 
 	override fun onServerLoaded(server: MinecraftServer) {
 		logger.info("Cache Initialized.")
-		ArrangementCache.init(server)
-		SeriesCache.init(server)
+
+		ArrangementCache.onServerLoaded(server)
+		SeriesCache.onServerLoaded(server)
+		ArrangeCommand.cacheInit()
+		SeriesCommand.cacheInit()
 	}
 
 	override fun onServerClosed(server: MinecraftServer) {
 		logger.info("Cache Saved.")
-		ArrangementCache.save(server)
-		SeriesCache.save(server)
+		ArrangementCache.getInstance().save()
+		SeriesCache.getInstance().save()
 	}
 
 	override fun registerCommands(dispatcher: CommandDispatcher<ServerCommandSource>, commandBuildContext: CommandRegistryAccess) {

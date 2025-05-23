@@ -12,7 +12,7 @@ import top.htext.kotreen.config.Arrangement
 import top.htext.kotreen.serialization.*
 import top.htext.kotreen.utils.ServerUtils
 
-object ArrangementCache {
+class ArrangementCache(val server: MinecraftServer) {
     private val cache = HashSet<Arrangement>()
     private var dirty = false
     private val mapper = ObjectMapper().apply {
@@ -29,12 +29,12 @@ object ArrangementCache {
         )
     }
 
-    fun init(server: MinecraftServer) {
+    init {
         val file = ServerUtils.getHashSetFile(server, "arrangement")
         cache.addAll(mapper.readValue(file, object : TypeReference<HashSet<Arrangement>>(){}))
     }
 
-    fun save(server: MinecraftServer) {
+    fun save() {
         if (dirty) {
             val file = ServerUtils.getHashSetFile(server, "arrangement")
             mapper.writeValue(file, cache)
@@ -59,5 +59,16 @@ object ArrangementCache {
     fun removeArrangement(name: String): Boolean {
         dirty = true
         return cache.removeIf { it.name == name }
+    }
+
+    companion object {
+        private lateinit var instance: ArrangementCache
+        fun onServerLoaded(server: MinecraftServer) {
+            instance = ArrangementCache(server)
+        }
+
+        fun getInstance(): ArrangementCache {
+            return instance
+        }
     }
 }
