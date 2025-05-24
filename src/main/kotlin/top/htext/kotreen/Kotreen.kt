@@ -23,17 +23,14 @@ object Kotreen : ModInitializer, CarpetExtension {
 
 	override fun onServerLoaded(server: MinecraftServer) {
 		logger.info("Cache Initialized.")
-
-		ArrangementCache.onServerLoaded(server)
-		SeriesCache.onServerLoaded(server)
-		ArrangeCommand.cacheInit()
-		SeriesCommand.cacheInit()
+		ArrangementCache.load(server)
+		SeriesCache.load(server)
 	}
 
 	override fun onServerClosed(server: MinecraftServer) {
 		logger.info("Cache Saved.")
-		ArrangementCache.getInstance().save()
-		SeriesCache.getInstance().save()
+		ArrangementCache.save()
+		SeriesCache.save()
 	}
 
 	override fun registerCommands(dispatcher: CommandDispatcher<ServerCommandSource>, commandBuildContext: CommandRegistryAccess) {

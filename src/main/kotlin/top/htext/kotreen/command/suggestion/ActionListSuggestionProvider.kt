@@ -16,7 +16,7 @@ class ActionListSuggestionProvider: SuggestionProvider<ServerCommandSource> {
         builder: SuggestionsBuilder
     ): CompletableFuture<Suggestions> {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getInstance().getArrangement(name) ?: return builder.buildFuture()
+        val arrangement = ArrangementCache.getArrangement(name) ?: return builder.buildFuture()
         arrangement.actions.forEachIndexed { index, action ->
             builder.suggest(
                 "$index",

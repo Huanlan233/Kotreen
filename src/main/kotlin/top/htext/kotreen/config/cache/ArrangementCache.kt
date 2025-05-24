@@ -11,8 +11,9 @@ import net.minecraft.util.math.Vec3d
 import top.htext.kotreen.config.Arrangement
 import top.htext.kotreen.serialization.*
 import top.htext.kotreen.utils.ServerUtils
+import java.io.File
 
-class ArrangementCache(val server: MinecraftServer) {
+object ArrangementCache {
     private val cache = HashSet<Arrangement>()
     private var dirty = false
     private val mapper = ObjectMapper().apply {
@@ -28,17 +29,18 @@ class ArrangementCache(val server: MinecraftServer) {
                 .addSerializer(Identifier::class.java, IdentifierSerializer())
         )
     }
+    private lateinit var file: File
 
-    init {
-        val file = ServerUtils.getHashSetFile(server, "arrangement")
+
+    fun load(server: MinecraftServer) {
+        this.file = ServerUtils.getHashSetFile(server, "arrangement")
+        cache.removeAll(cache)
         cache.addAll(mapper.readValue(file, object : TypeReference<HashSet<Arrangement>>(){}))
     }
 
     fun save() {
-        if (dirty) {
-            val file = ServerUtils.getHashSetFile(server, "arrangement")
-            mapper.writeValue(file, cache)
-        }
+        if (!dirty) return
+        mapper.writeValue(file, cache)
     }
 
     fun getCache(): HashSet<Arrangement> {
@@ -59,16 +61,5 @@ class ArrangementCache(val server: MinecraftServer) {
     fun removeArrangement(name: String): Boolean {
         dirty = true
         return cache.removeIf { it.name == name }
-    }
-
-    companion object {
-        private lateinit var instance: ArrangementCache
-        fun onServerLoaded(server: MinecraftServer) {
-            instance = ArrangementCache(server)
-        }
-
-        fun getInstance(): ArrangementCache {
-            return instance
-        }
     }
 }

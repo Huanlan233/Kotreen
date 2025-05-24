@@ -10,8 +10,9 @@ import top.htext.kotreen.config.Series
 import top.htext.kotreen.serialization.ArrangementDeserializer
 import top.htext.kotreen.serialization.ArrangementSerializer
 import top.htext.kotreen.utils.ServerUtils
+import java.io.File
 
-class SeriesCache(val server: MinecraftServer) {
+object SeriesCache {
     private val cache = HashSet<Series>()
     private var dirty = false
     private val mapper = ObjectMapper().apply {
@@ -23,17 +24,17 @@ class SeriesCache(val server: MinecraftServer) {
                 .addDeserializer(Arrangement::class.java, ArrangementDeserializer())
         )
     }
+    private lateinit var file: File
 
-    init {
-        val file = ServerUtils.getHashSetFile(server, "succession")
+    fun load(server: MinecraftServer) {
+        this.file = ServerUtils.getHashSetFile(server, "succession")
+        cache.removeAll(cache)
         cache.addAll(mapper.readValue(file, object : TypeReference<HashSet<Series>>(){}))
     }
 
     fun save() {
-        if (dirty) {
-            val file = ServerUtils.getHashSetFile(server, "succession")
-            mapper.writeValue(file, cache)
-        }
+        if (!dirty) return
+        mapper.writeValue(file, cache)
     }
 
     fun getCache(): HashSet<Series> {
@@ -54,16 +55,5 @@ class SeriesCache(val server: MinecraftServer) {
     fun removeSeries(name: String): Boolean {
         dirty = true
         return cache.removeIf { it.name == name }
-    }
-
-    companion object {
-        private lateinit var instance: SeriesCache
-        fun onServerLoaded(server: MinecraftServer) {
-            instance = SeriesCache(server)
-        }
-
-        fun getInstance(): SeriesCache {
-            return instance
-        }
     }
 }
