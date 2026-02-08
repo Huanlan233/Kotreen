@@ -10,7 +10,7 @@ import kotlin.io.path.notExists
 
 object ServerUtils {
     fun getHashSetFile(server: MinecraftServer, file: String): File {
-        val configPath = server.getSavePath(WorldSavePath.ROOT).resolve("botreen")
+        val configPath = server.getSavePath(WorldSavePath.ROOT).resolve("kotreen")
         val filePath = configPath.resolve("$file.json")
 
         if (configPath.notExists()) Files.createDirectories(configPath)

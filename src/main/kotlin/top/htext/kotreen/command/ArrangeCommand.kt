@@ -3,6 +3,7 @@ package top.htext.kotreen.command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
+import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.command.argument.Vec2ArgumentType
 import net.minecraft.command.argument.Vec3ArgumentType
@@ -10,35 +11,48 @@ import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.Text
+import top.htext.kotreen.KotreenSetting
 import top.htext.kotreen.command.suggestion.ActionListSuggestionProvider
 import top.htext.kotreen.command.suggestion.ArrangementSuggestionProvider
 import top.htext.kotreen.config.Arrangement
 import top.htext.kotreen.config.cache.ArrangementCache
 
 object ArrangeCommand {
+    private fun <S : ServerCommandSource, T : ArgumentBuilder<S, T>> T.hasPermission(permission: Int): T {
+        return this.requires { it.hasPermissionLevel(permission) }
+    }
+
     fun register(dispatcher: CommandDispatcher<ServerCommandSource>) {
         val command = literal("arrange")
             .then(argument("arrange", StringArgumentType.word())
                 .suggests(ArrangementSuggestionProvider())
+                .hasPermission(KotreenSetting.arrangementPermission)
                 .then(literal("create")
+                    .hasPermission(KotreenSetting.arrangementCreatePermission)
                     .executes(ArrangeCommand::createArrangement)
                 )
                 .then(literal("remove")
+                    .hasPermission(KotreenSetting.arrangementRemovePermission)
                     .executes(ArrangeCommand::removeArrangement)
                 )
                 .then(literal("spawn")
+                    .hasPermission(KotreenSetting.arrangementSpawnPermission)
                     .executes(ArrangeCommand::spawnArrangement)
                 )
                 .then(literal("kill")
+                    .hasPermission(KotreenSetting.arrangementKillPermission)
                     .executes(ArrangeCommand::killArrangement)
                 )
                 .then(literal("action")
+                    .hasPermission(KotreenSetting.arrangementActionPermission)
                     .executes(ArrangeCommand::actionArrangement)
                 )
                 .then(literal("stop")
+                    .hasPermission(KotreenSetting.arrangementStopPermission)
                     .executes(ArrangeCommand::stopArrangement)
                 )
                 .then(literal("modify")
+                    .hasPermission(KotreenSetting.arrangementModifyPermission)
                     .then(literal("description")
                         .then(argument("description", StringArgumentType.greedyString())
                             .executes(ArrangeCommand::modifyDescription)
@@ -112,6 +126,7 @@ object ArrangeCommand {
         val desc = "There is no description."
         val pos = player.pos
         val rot = player.rotationClient
+        val flying = !player.isOnGround
         val dimension = player.world.registryKey.value
 
         if (ArrangementCache.getArrangement(name) != null) {
@@ -119,7 +134,7 @@ object ArrangeCommand {
             return 0
         }
 
-        val arrangement = Arrangement(name, desc, pos, rot, dimension, ArrayList())
+        val arrangement = Arrangement(name, desc, pos, rot, flying, dimension, ArrayList())
         ArrangementCache.createArrangement(arrangement)
         return 1
     }

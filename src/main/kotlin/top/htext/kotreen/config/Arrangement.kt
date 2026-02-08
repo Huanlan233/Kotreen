@@ -14,6 +14,7 @@ data class Arrangement(
     var desc: String,
     var pos: Vec3d,
     var rot: Vec2f,
+    var flying: Boolean,
     val dimension: Identifier,
     val actions: ArrayList<String>
 ) {
@@ -35,7 +36,7 @@ data class Arrangement(
             rot.x.toDouble(),
             RegistryKey.of(RegistryKeys.WORLD, dimension),
             server.defaultGameMode,
-            false
+            flying
         )
         action(server)
         return true

@@ -2,11 +2,14 @@ package top.htext.kotreen.command
 
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.StringArgumentType
+import com.mojang.brigadier.builder.ArgumentBuilder
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.Text
+import top.htext.kotreen.KotreenSetting
 import top.htext.kotreen.command.suggestion.ArrangementSuggestionProvider
 import top.htext.kotreen.command.suggestion.SeriesArrangementSuggestionProvider
 import top.htext.kotreen.command.suggestion.SeriesSuggestionProvider
@@ -15,29 +18,41 @@ import top.htext.kotreen.config.cache.ArrangementCache
 import top.htext.kotreen.config.cache.SeriesCache
 
 object SeriesCommand {
+    private fun <S : ServerCommandSource, T : ArgumentBuilder<S, T>> T.hasPermission(permission: Int): T {
+        return this.requires { it.hasPermissionLevel(permission) }
+    }
+
     fun register(dispatcher: CommandDispatcher<ServerCommandSource>) {
-        val command = literal("series")
+        val command: LiteralArgumentBuilder<ServerCommandSource> = literal("series")
             .then(argument("series", StringArgumentType.word())
+                .hasPermission(KotreenSetting.seriesPermission)
                 .suggests(SeriesSuggestionProvider())
                 .then(literal("create")
+                    .hasPermission(KotreenSetting.seriesCreatePermission)
                     .executes(SeriesCommand::createSeries)
                 )
                 .then(literal("remove")
+                    .hasPermission(KotreenSetting.seriesRemovePermission)
                     .executes(SeriesCommand::removeSeries)
                 )
                 .then(literal("spawn")
+                    .hasPermission(KotreenSetting.seriesSpawnPermission)
                     .executes(SeriesCommand::spawnSeries)
                 )
                 .then(literal("kill")
+                    .hasPermission(KotreenSetting.seriesKillPermission)
                     .executes(SeriesCommand::killSeries)
                 )
                 .then(literal("action")
+                    .hasPermission(KotreenSetting.seriesActionPermission)
                     .executes(SeriesCommand::actionSeries)
                 )
                 .then(literal("stop")
+                    .hasPermission(KotreenSetting.seriesStopPermission)
                     .executes(SeriesCommand::stopSeries)
                 )
                 .then(literal("modify")
+                    .hasPermission(KotreenSetting.seriesModifyPermission)
                     .then(literal("description")
                         .then(argument("description", StringArgumentType.greedyString())
                             .executes(SeriesCommand::modifyDescription)
