@@ -7,5 +7,54 @@
   "kotreen.command.failure.series.null": "系列配置不存在",
   "kotreen.command.failure.action": "无法执行！出现了一点问题",
   "kotreen.command.tooltip.description": "描述：%s",
-  "kotreen.command.tooltip.action": "动作：%s"
+  "kotreen.command.tooltip.action": "动作：%s",
+
+  "kotreen.rule.arrangementPermission.name": "Arrange 指令权限",
+  "kotreen.rule.arrangementPermission.desc": "Arrange 指令权限",
+
+  "kotreen.rule.arrangementCreatePermission.name": "创建 Arrangement 权限",
+  "kotreen.rule.arrangementCreatePermission.desc": "创建 Arrangement 权限",
+
+  "kotreen.rule.arrangementRemovePermission.name": "删除 Arrangement 权限",
+  "kotreen.rule.arrangementRemovePermission.desc": "删除 Arrangement 权限",
+
+  "kotreen.rule.arrangementModifyPermission.name": "修改 Arrangement 权限",
+  "kotreen.rule.arrangementModifyPermission.desc": "修改 Arrangement 权限",
+
+  "kotreen.rule.arrangementSpawnPermission.name": "生成 Arrangement 权限",
+  "kotreen.rule.arrangementSpawnPermission.desc": "生成 Arrangement 权限",
+
+  "kotreen.rule.arrangementKillPermission.name": "下线 Arrangement 权限",
+  "kotreen.rule.arrangementKillPermission.desc": "下线 Arrangement 权限",
+
+  "kotreen.rule.arrangementActionPermission.name": "运行 Arrangement 权限",
+  "kotreen.rule.arrangementActionPermission.desc": "运行 Arrangement 权限",
+
+  "kotreen.rule.arrangementStopPermission.name": "停止 Arrangement 权限",
+  "kotreen.rule.arrangementStopPermission.desc": "停止 Arrangement 权限",
+
+
+  "kotreen.rule.seriesPermission.name": "Series 指令权限",
+  "kotreen.rule.seriesPermission.desc": "Series 指令权限",
+
+  "kotreen.rule.seriesCreatePermission.name": "创建 Series 权限",
+  "kotreen.rule.seriesCreatePermission.desc": "创建 Series 权限",
+
+  "kotreen.rule.seriesRemovePermission.name": "删除 Series 权限",
+  "kotreen.rule.seriesRemovePermission.desc": "删除 Series 权限",
+
+  "kotreen.rule.seriesModifyPermission.name": "修改 Series 权限",
+  "kotreen.rule.seriesModifyPermission.desc": "修改 Series 权限",
+
+  "kotreen.rule.seriesSpawnPermission.name": "生成 Series 权限",
+  "kotreen.rule.seriesSpawnPermission.desc": "生成 Series 权限",
+
+  "kotreen.rule.seriesKillPermission.name": "下线 Series 权限",
+  "kotreen.rule.seriesKillPermission.desc": "下线 Series 权限",
+
+  "kotreen.rule.seriesActionPermission.name": "运行 Series 权限",
+  "kotreen.rule.seriesActionPermission.desc": "运行 Series 权限",
+
+  "kotreen.rule.seriesStopPermission.name": "停止 Series 权限",
+  "kotreen.rule.seriesStopPermission.desc": "停止 Series 权限"
 }

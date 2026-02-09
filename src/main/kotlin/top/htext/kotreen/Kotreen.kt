@@ -2,47 +2,49 @@ package top.htext.kotreen
 
 import carpet.CarpetExtension
 import carpet.CarpetServer
-import carpet.settings.SettingsManager
+import carpet.api.settings.SettingsManager
 import com.mojang.brigadier.CommandDispatcher
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.FabricLoader
 import net.minecraft.command.CommandRegistryAccess
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.command.ServerCommandSource
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import top.htext.kotreen.command.ArrangeCommand
 import top.htext.kotreen.command.SeriesCommand
 import top.htext.kotreen.config.cache.ArrangementCache
 import top.htext.kotreen.config.cache.SeriesCache
+import top.htext.kotreen.utils.TranslationsUtils
 
-@Suppress("removal")
 object Kotreen : ModInitializer, CarpetExtension {
-	private const val MOD_ID = "kotreen"
-	private val VERSION = FabricLoader.INSTANCE.getModContainer(MOD_ID).map { it.metadata.version.friendlyString }.orElse("unknown")
+	const val MOD_ID = "kotreen"
+	val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
+	val VERSION: String = FabricLoader.INSTANCE.getModContainer(MOD_ID).map { it.metadata.version.friendlyString }.orElse("unknown")
+	val settingsManager = SettingsManager(VERSION, MOD_ID, "Kotreen")
 
-	private val logger = LoggerFactory.getLogger(MOD_ID)
-	private val settingsManager = SettingsManager(VERSION, MOD_ID, "Kotreen")
+	init {
+		CarpetServer.manageExtension(this)
+	}
 
 	override fun onInitialize() {
-		logger.info("Kotreen Initialized.")
-		CarpetServer.manageExtension(this)
-		settingsManager.parseSettingsClass(KotreenSetting::class.java)
+		LOGGER.info("Kotreen Initialized.")
 	}
 
 	override fun onServerLoaded(server: MinecraftServer) {
-		logger.info("Cache Loaded.")
+		LOGGER.info("Cache Loaded.")
 		ArrangementCache.load(server)
 		SeriesCache.load(server)
 	}
 
 	override fun onServerClosed(server: MinecraftServer) {
-		logger.info("Cache Saved.")
+		LOGGER.info("Cache Saved.")
 		ArrangementCache.save()
 		SeriesCache.save()
 	}
 
 	override fun onGameStarted() {
-
+		settingsManager.parseSettingsClass(KotreenSetting::class.java)
 	}
 
 	override fun extensionSettingsManager(): SettingsManager {
@@ -52,5 +54,9 @@ object Kotreen : ModInitializer, CarpetExtension {
 	override fun registerCommands(dispatcher: CommandDispatcher<ServerCommandSource>, commandBuildContext: CommandRegistryAccess) {
 		ArrangeCommand.register(dispatcher)
 		SeriesCommand.register(dispatcher)
+	}
+
+	override fun canHasTranslations(lang: String): Map<String, String> {
+		return TranslationsUtils.getTranslation(lang)
 	}
 }

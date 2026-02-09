@@ -7,5 +7,54 @@
   "kotreen.command.failure.series.null": "The series is null.",
   "kotreen.command.failure.action": "Cannot operate! Something went wrong.",
   "kotreen.command.tooltip.description": "Description: %s",
-  "kotreen.command.tooltip.action": "Action: %s"
+  "kotreen.command.tooltip.action": "Action: %s",
+
+  "kotreen.rule.arrangementPermission.name": "Permission of Command Arrange",
+  "kotreen.rule.arrangementPermission.desc": "The permission of command arrange",
+
+  "kotreen.rule.arrangementCreatePermission.name": "Permission of Creating Arrangement",
+  "kotreen.rule.arrangementCreatePermission.desc": "The permission of creating arrange",
+
+  "kotreen.rule.arrangementRemovePermission.name": "Permission of Removing Arrangement",
+  "kotreen.rule.arrangementRemovePermission.desc": "The permission of removing arrange",
+
+  "kotreen.rule.arrangementModifyPermission.name": "Permission of Modifying Arrangement",
+  "kotreen.rule.arrangementModifyPermission.desc": "The permission of modifying arrange",
+
+  "kotreen.rule.arrangementSpawnPermission.name": "Permission of Spawning Arrangement",
+  "kotreen.rule.arrangementSpawnPermission.desc": "The permission of spawning arrange",
+
+  "kotreen.rule.arrangementKillPermission.name": "Permission of Killing Arrangement",
+  "kotreen.rule.arrangementKillPermission.desc": "The permission of killing arrange",
+
+  "kotreen.rule.arrangementActionPermission.name": "Permission of Running Arrangement",
+  "kotreen.rule.arrangementActionPermission.desc": "The permission of running arrange",
+
+  "kotreen.rule.arrangementStopPermission.name": "Permission of Stoping Arrangement",
+  "kotreen.rule.arrangementStopPermission.desc": "The permission of stoping arrange",
+
+
+  "kotreen.rule.seriesPermission.name": "Permission of Command Series",
+  "kotreen.rule.seriesPermission.desc": "The permission of command series",
+
+  "kotreen.rule.seriesCreatePermission.name": "Permission of Creating Series",
+  "kotreen.rule.seriesCreatePermission.desc": "The permission of creating series",
+
+  "kotreen.rule.seriesRemovePermission.name": "Permission of Removing Series",
+  "kotreen.rule.seriesRemovePermission.desc": "The permission of removing series",
+
+  "kotreen.rule.seriesModifyPermission.name": "Permission of Modifying Series",
+  "kotreen.rule.seriesModifyPermission.desc": "The permission of modifying series",
+
+  "kotreen.rule.seriesSpawnPermission.name": "Permission of Spawning Series",
+  "kotreen.rule.seriesSpawnPermission.desc": "The permission of spawning series",
+
+  "kotreen.rule.seriesKillPermission.name": "Permission of Killing Series",
+  "kotreen.rule.seriesKillPermission.desc": "The permission of killing series",
+
+  "kotreen.rule.seriesActionPermission.name": "Permission of Running Series",
+  "kotreen.rule.seriesActionPermission.desc": "The permission of running series",
+
+  "kotreen.rule.seriesStopPermission.name": "Permission of Stoping Series",
+  "kotreen.rule.seriesStopPermission.desc": "The permission of stoping series"
 }

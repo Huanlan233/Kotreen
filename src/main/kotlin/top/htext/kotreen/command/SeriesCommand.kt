@@ -1,5 +1,6 @@
 package top.htext.kotreen.command
 
+import carpet.utils.CommandHelper
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.ArgumentBuilder
@@ -18,8 +19,8 @@ import top.htext.kotreen.config.cache.ArrangementCache
 import top.htext.kotreen.config.cache.SeriesCache
 
 object SeriesCommand {
-    private fun <S : ServerCommandSource, T : ArgumentBuilder<S, T>> T.hasPermission(permission: Int): T {
-        return this.requires { it.hasPermissionLevel(permission) }
+    private fun <S : ServerCommandSource, T : ArgumentBuilder<S, T>> T.hasPermission(permission: Any): T {
+        return this.requires { CommandHelper.canUseCommand(it, permission) }
     }
 
     fun register(dispatcher: CommandDispatcher<ServerCommandSource>) {

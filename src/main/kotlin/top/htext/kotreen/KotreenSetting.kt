@@ -1,56 +1,122 @@
 package top.htext.kotreen
 
-import carpet.settings.Rule
+import carpet.api.settings.Rule
+import carpet.api.settings.Validators
 
-@Suppress("removal")
 object KotreenSetting {
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
-    @JvmField
-    var seriesPermission: Int = 0
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
-    @JvmField
-    var seriesCreatePermission: Int = 4
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
-    @JvmField
-    var seriesRemovePermission: Int = 4
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
-    @JvmField
-    var seriesModifyPermission: Int = 4
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
-    @JvmField
-    var seriesSpawnPermission: Int = 0
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
-    @JvmField
-    var seriesKillPermission: Int = 0
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
-    @JvmField
-    var seriesActionPermission: Int = 0
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
-    @JvmField
-    var seriesStopPermission: Int = 0
+    private const val CREATIVE = "creative"
 
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
     @JvmField
-    var arrangementPermission: Int = 0
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
+    var seriesPermission = "true"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
     @JvmField
-    var arrangementCreatePermission: Int = 4
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
+    var seriesCreatePermission = "ops"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
     @JvmField
-    var arrangementRemovePermission: Int = 4
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
+    var seriesRemovePermission = "ops"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
     @JvmField
-    var arrangementModifyPermission: Int = 4
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
+    var seriesModifyPermission = "ops"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
     @JvmField
-    var arrangementSpawnPermission: Int = 0
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
+    var seriesSpawnPermission = "true"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
     @JvmField
-    var arrangementKillPermission: Int = 0
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
+    var seriesKillPermission = "true"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
     @JvmField
-    var arrangementActionPermission: Int = 0
-    @Rule(options = ["0", "1", "2", "3", "4"], category = ["creative"], desc = " ")
+    var seriesActionPermission = "true"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
     @JvmField
-    var arrangementStopPermission: Int = 0
+    var seriesStopPermission = "true"
+
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
+    @JvmField
+    var arrangementPermission = "true"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
+    @JvmField
+    var arrangementCreatePermission = "ops"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
+    @JvmField
+    var arrangementRemovePermission = "ops"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
+    @JvmField
+    var arrangementModifyPermission = "ops"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
+    @JvmField
+    var arrangementSpawnPermission = "true"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
+    @JvmField
+    var arrangementKillPermission = "true"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
+    @JvmField
+    var arrangementActionPermission = "true"
+    @Rule(
+        options = ["true", "false", "ops", "0", "1", "2", "3", "4"], 
+        categories = [CREATIVE], 
+        validators = [Validators.CommandLevel::class]
+    )
+    @JvmField
+    var arrangementStopPermission = "true"
 }
