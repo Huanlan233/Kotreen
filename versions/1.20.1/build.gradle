@@ -1,0 +1,72 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+apply plugin: "org.jetbrains.kotlin.jvm"
+apply plugin: "fabric-loom"
+apply plugin: "com.replaymod.preprocess"
+
+repositories {
+    maven {url "https://masa.dy.fi/maven" }
+}
+
+base {
+    archivesName = project.archives_base_name
+    version = project.mod_version
+    group = project.maven_group
+}
+
+dependencies {
+    minecraft("com.mojang:minecraft:${project.minecraft_version}")
+    mappings("net.fabricmc:yarn:${project.yarn_mappings}:v2")
+
+    modImplementation("com.fasterxml.jackson.core:jackson-core:${project.jackson_version}")
+    modImplementation("com.fasterxml.jackson.core:jackson-annotations:${project.jackson_version}")
+    modImplementation("com.fasterxml.jackson.core:jackson-databind:${project.jackson_version}")
+    modImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:${project.jackson_version}")
+
+    modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}")
+    modImplementation("carpet:fabric-carpet:${project.carpet_core_version}")
+}
+
+processResources {
+    inputs.property("version", project.version)
+
+    filesMatching("fabric.mod.json") {
+        def resourceMap = [
+                "version": project.version,
+                "mod_id": project.mod_id,
+                "mod_name": project.mod_name,
+                "loader_version": project.loader_version,
+                "minecraft_version": project.minecraft_version
+        ]
+        expand resourceMap
+    }
+}
+
+jar {
+    inputs.property("archivesName", project.base.archivesName)
+
+    from("LICENSE") {
+        rename { "${it}_${inputs.properties.archivesName}"}
+    }
+}
+
+java {
+    withSourcesJar()
+    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.withType(KotlinCompile).configureEach {
+    it.kotlinOptions.jvmTarget = 17
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 17
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+}
