@@ -26,7 +26,7 @@
 		"kotreen.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">={loader_version}",
+		"fabricloader": ">=${loader_version}",
 		"minecraft": "${minecraft_version}",
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*",

@@ -9,7 +9,6 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.GameMode
-
 data class Arrangement(
     @field:JsonProperty("name") val name: String,
     @field:JsonProperty("desc") var desc: String,
@@ -33,12 +32,16 @@ data class Arrangement(
         EntityPlayerMPFake.createFake(
             name,
             server,
+
             Vec3d(pos[0], pos[1], pos[2]),
             rot[0].toDouble(),
             rot[1].toDouble(),
             RegistryKey.of(RegistryKeys.WORLD, Identifier(dimension)),
             GameMode.valueOf(gameMode),
             flying
+            //#if mcVersion >= 12002
+            //$$ ,{}
+            //#endif
         )
         action(server)
         return true
