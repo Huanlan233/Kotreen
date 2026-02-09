@@ -3,6 +3,7 @@ package top.htext.kotreen
 import carpet.CarpetExtension
 import carpet.CarpetServer
 import carpet.api.settings.SettingsManager
+import carpet.utils.Translations
 import com.mojang.brigadier.CommandDispatcher
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.FabricLoader
@@ -15,7 +16,6 @@ import top.htext.kotreen.command.ArrangeCommand
 import top.htext.kotreen.command.SeriesCommand
 import top.htext.kotreen.config.cache.ArrangementCache
 import top.htext.kotreen.config.cache.SeriesCache
-import top.htext.kotreen.utils.TranslationsUtils
 
 object Kotreen : ModInitializer, CarpetExtension {
 	const val MOD_ID = "kotreen"
@@ -57,6 +57,6 @@ object Kotreen : ModInitializer, CarpetExtension {
 	}
 
 	override fun canHasTranslations(lang: String): Map<String, String> {
-		return TranslationsUtils.getTranslation(lang)
+		return Translations.getTranslationFromResourcePath("assets/${MOD_ID}/lang/$lang.json")
 	}
 }

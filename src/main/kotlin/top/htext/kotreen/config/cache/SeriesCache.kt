@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
 import net.minecraft.server.MinecraftServer
+import top.htext.kotreen.Kotreen.LOGGER
 import top.htext.kotreen.config.Arrangement
 import top.htext.kotreen.config.Series
 import top.htext.kotreen.serialization.ArrangementDeserializer
@@ -28,12 +29,14 @@ object SeriesCache {
 
     fun load(server: MinecraftServer) {
         this.file = ServerUtils.getHashSetFile(server, "succession")
+        LOGGER.info("Series Cache Loaded From ${file.toPath()}")
         cache.removeAll(cache)
         cache.addAll(mapper.readValue(file, object : TypeReference<HashSet<Series>>(){}))
     }
 
     fun save() {
         if (!dirty) return
+        LOGGER.info("Series Cache Saved.")
         mapper.writeValue(file, cache)
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import net.minecraft.server.MinecraftServer
+import top.htext.kotreen.Kotreen.LOGGER
 import top.htext.kotreen.config.Arrangement
 import top.htext.kotreen.utils.ServerUtils
 import java.io.File
@@ -20,12 +21,14 @@ object ArrangementCache {
 
     fun load(server: MinecraftServer) {
         this.file = ServerUtils.getHashSetFile(server, "arrangement")
+        LOGGER.info("Arrangement Cache Loaded From ${file.toPath()}")
         cache.removeAll(cache)
         cache.addAll(mapper.readValue(file, object : TypeReference<HashSet<Arrangement>>(){}))
     }
 
     fun save() {
         if (!dirty) return
+        LOGGER.info("Arrangement Cache Saved.")
         mapper.writeValue(file, cache)
     }
 
