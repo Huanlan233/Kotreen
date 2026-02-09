@@ -12,6 +12,8 @@ import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.Text
+import net.minecraft.util.math.Vec2f
+import net.minecraft.util.math.Vec3d
 import top.htext.kotreen.KotreenSetting
 import top.htext.kotreen.command.suggestion.ActionListSuggestionProvider
 import top.htext.kotreen.command.suggestion.ArrangementSuggestionProvider
@@ -21,6 +23,14 @@ import top.htext.kotreen.config.cache.ArrangementCache
 object ArrangeCommand {
     private fun <S : ServerCommandSource, T : ArgumentBuilder<S, T>> T.hasPermission(permission: Any): T {
         return this.requires { CommandHelper.canUseCommand(it, permission) }
+    }
+
+    private fun Vec3d.toList(): List<Double> {
+        return listOf(this.x, this.y, this.z)
+    }
+
+    private fun Vec2f.toList(): List<Float> {
+        return listOf(this.x, this.y)
     }
 
     fun register(dispatcher: CommandDispatcher<ServerCommandSource>) {
@@ -125,17 +135,18 @@ object ArrangeCommand {
         val player = context.source.player ?: return 0
         val name = StringArgumentType.getString(context, "arrange")
         val desc = "There is no description."
-        val pos = player.pos
-        val rot = player.rotationClient
+        val pos = player.pos.toList()
+        val rot = player.rotationClient.toList()
         val flying = !player.isOnGround
-        val dimension = player.world.registryKey.value
+        val gameMode = player.interactionManager.gameMode.name
+        val dimension = player.world.registryKey.value.toString()
 
         if (ArrangementCache.getArrangement(name) != null) {
             context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.existed"))
             return 0
         }
 
-        val arrangement = Arrangement(name, desc, pos, rot, flying, dimension, ArrayList())
+        val arrangement = Arrangement(name, desc, pos, rot, gameMode, flying, dimension, ArrayList())
         ArrangementCache.createArrangement(arrangement)
         return 1
     }
@@ -277,7 +288,7 @@ object ArrangeCommand {
             context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
             return 0
         }
-        arrangement.pos = player.pos
+        arrangement.pos = player.pos.toList()
         return 1
     }
 
@@ -288,7 +299,7 @@ object ArrangeCommand {
             return 0
         }
         val pos = Vec3ArgumentType.getVec3(context, "position")
-        arrangement.pos = pos
+        arrangement.pos = pos.toList()
         return 1
     }
 
@@ -299,7 +310,7 @@ object ArrangeCommand {
             context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
             return 0
         }
-        arrangement.rot = player.rotationClient
+        arrangement.rot = player.rotationClient.toList()
         return 1
     }
 
@@ -310,7 +321,7 @@ object ArrangeCommand {
             return 0
         }
         val rot = Vec2ArgumentType.getVec2(context, "rotation")
-        arrangement.rot = rot
+        arrangement.rot = rot.toList()
         return 1
     }
 }

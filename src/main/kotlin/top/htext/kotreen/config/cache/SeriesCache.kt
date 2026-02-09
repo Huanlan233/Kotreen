@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import net.minecraft.server.MinecraftServer
 import top.htext.kotreen.config.Arrangement
 import top.htext.kotreen.config.Series
-import top.htext.kotreen.serialization.deserializer.ArrangementDeserializer
-import top.htext.kotreen.serialization.serializer.ArrangementSerializer
+import top.htext.kotreen.serialization.ArrangementDeserializer
+import top.htext.kotreen.serialization.ArrangementSerializer
 import top.htext.kotreen.utils.ServerUtils
 import java.io.File
 

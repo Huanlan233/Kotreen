@@ -2,21 +2,23 @@ package top.htext.kotreen.config
 
 import carpet.fakes.ServerPlayerInterface
 import carpet.patches.EntityPlayerMPFake
+import com.fasterxml.jackson.annotation.JsonProperty
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
+import net.minecraft.world.GameMode
 
 data class Arrangement(
-    val name: String,
-    var desc: String,
-    var pos: Vec3d,
-    var rot: Vec2f,
-    var flying: Boolean,
-    val dimension: Identifier,
-    val actions: ArrayList<String>
+    @field:JsonProperty("name") val name: String,
+    @field:JsonProperty("desc") var desc: String,
+    @field:JsonProperty("pos") var pos: List<Double>,
+    @field:JsonProperty("rot") var rot: List<Float>,
+    @field:JsonProperty("gamemode") val gameMode: String,
+    @field:JsonProperty("flying") var flying: Boolean,
+    @field:JsonProperty("dimension") val dimension: String,
+    @field:JsonProperty("actions") val actions: ArrayList<String>
 ) {
     override fun hashCode(): Int {
         return name.hashCode()
@@ -31,11 +33,11 @@ data class Arrangement(
         EntityPlayerMPFake.createFake(
             name,
             server,
-            pos,
-            rot.y.toDouble(),
-            rot.x.toDouble(),
-            RegistryKey.of(RegistryKeys.WORLD, dimension),
-            server.defaultGameMode,
+            Vec3d(pos[0], pos[1], pos[2]),
+            rot[0].toDouble(),
+            rot[1].toDouble(),
+            RegistryKey.of(RegistryKeys.WORLD, Identifier(dimension)),
+            GameMode.valueOf(gameMode),
             flying
         )
         action(server)
