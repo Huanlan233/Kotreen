@@ -11,9 +11,11 @@ import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.Text
 import top.htext.kotreen.KotreenSetting
+import top.htext.kotreen.command.suggestion.ArrangementListSuggestionProvider
 import top.htext.kotreen.command.suggestion.ArrangementSuggestionProvider
 import top.htext.kotreen.command.suggestion.SeriesArrangementSuggestionProvider
 import top.htext.kotreen.command.suggestion.SeriesSuggestionProvider
+import top.htext.kotreen.config.Arrangement
 import top.htext.kotreen.config.Series
 import top.htext.kotreen.config.cache.ArrangementCache
 import top.htext.kotreen.config.cache.SeriesCache
@@ -31,6 +33,10 @@ object SeriesCommand {
                 .then(literal("create")
                     .hasPermission(KotreenSetting.seriesCreatePermission)
                     .executes(SeriesCommand::createSeries)
+                    .then(argument("arrangements", StringArgumentType.greedyString())
+                        .suggests(ArrangementListSuggestionProvider())
+                        .executes(SeriesCommand::createSeriesWithArrangements)
+                    )
                 )
                 .then(literal("remove")
                     .hasPermission(KotreenSetting.seriesRemovePermission)
@@ -85,6 +91,21 @@ object SeriesCommand {
         val name = StringArgumentType.getString(context, "series")
         val desc = "There is no description."
         val series = Series(name, desc, HashSet())
+        if (SeriesCache.createSeries(series)) return 1
+        context.source.sendError(Text.translatable("kotreen.command.failure.series.existed"))
+        return 0
+    }
+
+    private fun createSeriesWithArrangements(context: CommandContext<ServerCommandSource>): Int {
+        val name = StringArgumentType.getString(context, "series")
+        val desc = "There is no description."
+        val arrangementNames = StringArgumentType.getString(context, "arrangements").split(" ").toHashSet()
+        val arrangements = HashSet<Arrangement>()
+        arrangementNames.forEach {
+            ArrangementCache.getArrangement(it)?.let { e -> arrangements.add(e) }
+        }
+
+        val series = Series(name, desc, arrangements)
         if (SeriesCache.createSeries(series)) return 1
         context.source.sendError(Text.translatable("kotreen.command.failure.series.existed"))
         return 0
