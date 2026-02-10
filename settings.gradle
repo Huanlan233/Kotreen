@@ -25,13 +25,10 @@ pluginManagement {
 	}
 }
 
-Map<String, List<String>> settings = file("settings.json").withReader {
-	new JsonSlurper().parse(it) as Map<String, List<String>>
-}
-
+def settings = new JsonSlurper().parseText(file('settings.json').text)
 for (String version : settings.get("versions")) {
 	include(":$version")
-	ProjectDescriptor proj = project(":$version")
-	proj.setProjectDir(file("versions/$version"))
-	proj.setBuildFileName("../${settings.versions.get(0)}/build.gradle")
+	def proj = project(":$version")
+	proj.projectDir = file("versions/$version")
+	proj.buildFileName = "../../common.gradle"
 }

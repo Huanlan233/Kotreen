@@ -2,12 +2,14 @@ apply plugin: "org.jetbrains.kotlin.jvm"
 apply plugin: "fabric-loom"
 apply plugin: "com.replaymod.preprocess"
 
+int mcVersion = project.mcVersion
+
 preprocess {
-    vars.put("mcVersion", 12002)
+    vars.put("mcVersion", project.properties["mcVersion"] as int)
 }
 
 repositories {
-    maven {url "https://masa.dy.fi/maven" }
+    maven {url  = "https://masa.dy.fi/maven" }
 }
 
 base {
@@ -56,17 +58,32 @@ jar {
     }
 }
 
+
+JavaVersion JAVA_COMPATIBILITY
+if (mcVersion >= 11700) {
+    JAVA_COMPATIBILITY = JavaVersion.VERSION_16
+} else if (mcVersion >= 11800) {
+    JAVA_COMPATIBILITY = JavaVersion.VERSION_17
+} else if (mcVersion >= 12005) {
+    JAVA_COMPATIBILITY = JavaVersion.VERSION_21
+} else if (mcVersion >= 260100) {
+    JAVA_COMPATIBILITY = JavaVersion.VERSION_25
+} else {
+    JAVA_COMPATIBILITY = JavaVersion.VERSION_1_8
+}
+int JAVA_INT = JAVA_COMPATIBILITY.toString().toInteger()
+
 java {
     withSourcesJar()
-    targetCompatibility = JavaVersion.VERSION_21
-    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JAVA_COMPATIBILITY
+    sourceCompatibility = JAVA_COMPATIBILITY
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = JAVA_INT
+    it.options.encoding = "UTF-8"
 }
 
 kotlin {
     jvmToolchain(21)
-}
-
-tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
-    it.options.encoding = "UTF-8"
 }
