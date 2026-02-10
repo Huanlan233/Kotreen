@@ -1,8 +1,7 @@
 package top.htext.kotreen.config.cache
 
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import net.minecraft.server.MinecraftServer
 import top.htext.kotreen.Kotreen.LOGGER
 import top.htext.kotreen.config.Arrangement
@@ -12,10 +11,10 @@ import java.io.File
 object ArrangementCache {
     private val cache = HashSet<Arrangement>()
     private var dirty = false
-    private val mapper = ObjectMapper().apply {
-        findAndRegisterModules()
-        enable(SerializationFeature.INDENT_OUTPUT)
-    }
+    private val gson = GsonBuilder()
+        .setPrettyPrinting()
+        .disableHtmlEscaping()
+        .create()
     private lateinit var file: File
 
 
@@ -23,13 +22,17 @@ object ArrangementCache {
         this.file = ServerUtils.getHashSetFile(server, "arrangement")
         LOGGER.info("Arrangement Cache Loaded From ${file.toPath()}")
         cache.removeAll(cache)
-        cache.addAll(mapper.readValue(file, object : TypeReference<HashSet<Arrangement>>(){}))
+
+        val typeToken = object : TypeToken<HashSet<Arrangement>>(){}.type
+        cache.addAll(gson.fromJson<HashSet<Arrangement>>(file.reader(), typeToken))
     }
 
     fun save() {
         if (!dirty) return
         LOGGER.info("Arrangement Cache Saved.")
-        mapper.writeValue(file, cache)
+        file.writer().use {
+            gson.toJson(cache, it)
+        }
     }
 
     fun getCache(): HashSet<Arrangement> {

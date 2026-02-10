@@ -2,22 +2,23 @@ package top.htext.kotreen.config
 
 import carpet.fakes.ServerPlayerInterface
 import carpet.patches.EntityPlayerMPFake
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.GameMode
+
 data class Arrangement(
-    @field:JsonProperty("name") val name: String,
-    @field:JsonProperty("desc") var desc: String,
-    @field:JsonProperty("pos") var pos: List<Double>,
-    @field:JsonProperty("rot") var rot: List<Float>,
-    @field:JsonProperty("gamemode") val gameMode: String,
-    @field:JsonProperty("flying") var flying: Boolean,
-    @field:JsonProperty("dimension") val dimension: String,
-    @field:JsonProperty("actions") val actions: ArrayList<String>
+    @field:SerializedName("name") val name: String,
+    @field:SerializedName("desc") var desc: String,
+    @field:SerializedName("pos") var pos: List<Double>,
+    @field:SerializedName("rot") var rot: List<Float>,
+    @field:SerializedName("gamemode") val gameMode: String,
+    @field:SerializedName("flying") var flying: Boolean,
+    @field:SerializedName("dimension") val dimension: String,
+    @field:SerializedName("actions") val actions: ArrayList<String>
 ) {
     override fun hashCode(): Int {
         return name.hashCode()

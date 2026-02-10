@@ -1,12 +1,12 @@
 package top.htext.kotreen.config
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 import net.minecraft.server.MinecraftServer
 
 data class Series(
-    @field:JsonProperty("name") val name: String,
-    @field:JsonProperty("desc") var desc: String,
-    @field:JsonProperty("arrangements") val arrangements: HashSet<Arrangement>
+    @field:SerializedName("name") val name: String,
+    @field:SerializedName("desc") var desc: String,
+    @field:SerializedName("arrangements") val arrangements: HashSet<Arrangement>
 ) {
     override fun equals(other: Any?): Boolean {
         return other is Series && other.hashCode() == this.hashCode()

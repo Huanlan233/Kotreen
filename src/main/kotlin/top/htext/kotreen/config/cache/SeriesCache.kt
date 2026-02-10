@@ -1,43 +1,40 @@
 package top.htext.kotreen.config.cache
 
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.databind.module.SimpleModule
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import net.minecraft.server.MinecraftServer
 import top.htext.kotreen.Kotreen.LOGGER
 import top.htext.kotreen.config.Arrangement
 import top.htext.kotreen.config.Series
-import top.htext.kotreen.serialization.ArrangementDeserializer
-import top.htext.kotreen.serialization.ArrangementSerializer
+import top.htext.kotreen.serialization.ArrangementAdapter
 import top.htext.kotreen.utils.ServerUtils
 import java.io.File
 
 object SeriesCache {
     private val cache = HashSet<Series>()
     private var dirty = false
-    private val mapper = ObjectMapper().apply {
-        findAndRegisterModules()
-        enable(SerializationFeature.INDENT_OUTPUT)
-        registerModules(
-            SimpleModule()
-                .addSerializer(Arrangement::class.java, ArrangementSerializer())
-                .addDeserializer(Arrangement::class.java, ArrangementDeserializer())
-        )
-    }
+    private val gson = GsonBuilder()
+        .registerTypeAdapter(Arrangement::class.java, ArrangementAdapter())
+        .setPrettyPrinting()
+        .disableHtmlEscaping()
+        .create()
     private lateinit var file: File
 
     fun load(server: MinecraftServer) {
         this.file = ServerUtils.getHashSetFile(server, "succession")
         LOGGER.info("Series Cache Loaded From ${file.toPath()}")
         cache.removeAll(cache)
-        cache.addAll(mapper.readValue(file, object : TypeReference<HashSet<Series>>(){}))
+
+        val typeToken = object : TypeToken<HashSet<Series>>() {}.type
+        cache.addAll(gson.fromJson<HashSet<Series>>(file.reader(), typeToken))
     }
 
     fun save() {
         if (!dirty) return
         LOGGER.info("Series Cache Saved.")
-        mapper.writeValue(file, cache)
+        file.writer().use {
+            gson.toJson(cache, it)
+        }
     }
 
     fun getCache(): HashSet<Series> {
