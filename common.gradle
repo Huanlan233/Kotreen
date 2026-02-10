@@ -12,10 +12,11 @@ repositories {
     maven {url  = "https://masa.dy.fi/maven" }
 }
 
+version = project.mod_version
+group = project.maven_group
+
 base {
-    archivesName = project.archives_base_name
-    version = project.mod_version
-    group = project.maven_group
+    archivesName = "${project.archives_base_name}-${project.name}"
 }
 
 dependencies {
