@@ -1,6 +1,7 @@
 package top.htext.kotreen.config.cache
 
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import net.minecraft.server.MinecraftServer
 import top.htext.kotreen.Kotreen.LOGGER
@@ -23,7 +24,13 @@ object SeriesCache {
         cache.removeAll(cache)
 
         val typeToken = object : TypeToken<HashSet<Series>>() {}.type
-        cache.addAll(gson.fromJson<HashSet<Series>>(file.reader(), typeToken))
+        val element = JsonParser.parseReader(file.reader())
+        if (!element.isJsonArray || element.isJsonNull) {
+            cache.addAll(HashSet())
+            LOGGER.warn("Failed to read cache file ${file.toPath()} and has written new empty set.")
+        } else {
+            cache.addAll(gson.fromJson<HashSet<Series>>(file.reader(), typeToken))
+        }
     }
 
     fun save() {
