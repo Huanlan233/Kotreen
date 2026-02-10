@@ -32,11 +32,8 @@ jobs:
         run : |
           shopt -s extglob
           mkdir jars
-          for ver in versions/*/; do
-            ver_name = ${ver%/}
-            for jar in versions/${ver_name}/build/libs/!(*-@(dev|sources|shadow)).jar; do
-              mv "$jar" "jars/${ver_name}-${jar}"
-            done
+          for jar in versions/*/build/libs/!(*-@(dev|sources|shadow)).jar; do
+              cp -p "$jar" jars/
           done
           ls -l jars
         
