@@ -5,7 +5,7 @@ import carpet.patches.EntityPlayerMPFake
 import com.google.gson.annotations.SerializedName
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
-import net.minecraft.server.MinecraftServer
+import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.GameMode
@@ -28,8 +28,9 @@ data class Arrangement(
         return other is Arrangement && other.hashCode() == this.hashCode()
     }
 
-    fun spawn(server: MinecraftServer): Boolean {
-        if (server.playerManager.getPlayer(name) != null) return false
+    fun spawn(source: ServerCommandSource): Int {
+        val server = source.server
+        if (server.playerManager.getPlayer(name) != null) return 0
         EntityPlayerMPFake.createFake(
             name,
             server,
@@ -44,29 +45,32 @@ data class Arrangement(
             //$$ ,{}
             //#endif
         )
-        action(server)
-        return true
+        action(source)
+        return 1
     }
 
-    fun kill(server: MinecraftServer): Boolean {
-        val player = server.playerManager.getPlayer(name) ?: return false
+    fun kill(source: ServerCommandSource): Int {
+        val server = source.server
+        val player = server.playerManager.getPlayer(name) ?: return 0
         (player as EntityPlayerMPFake).kill()
-        return true
+        return 1
     }
 
-    fun action(server: MinecraftServer): Boolean {
-        if (server.playerManager.getPlayer(name) == null) return false
+    fun action(source: ServerCommandSource): Int {
+        val server = source.server
+        if (server.playerManager.getPlayer(name) == null) return 0
         val commandSource = server.commandSource.withLevel(4).withSilent()
         val commandManager = server.commandManager
         actions.forEach {
             val command = "/player $name $it"
             commandManager.executeWithPrefix(commandSource, command)
         }
-        return true
+        return 1
     }
 
-    fun stop(server: MinecraftServer): Boolean {
-        (server.playerManager.getPlayer(name) as EntityPlayerMPFake as ServerPlayerInterface).actionPack.stopAll() ?: return false
-        return true
+    fun stop(source: ServerCommandSource): Int {
+        val server = source.server
+        (server.playerManager.getPlayer(name) as EntityPlayerMPFake as ServerPlayerInterface).actionPack.stopAll() ?: return 0
+        return 1
     }
 }

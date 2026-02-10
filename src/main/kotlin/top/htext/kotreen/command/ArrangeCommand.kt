@@ -11,7 +11,6 @@ import net.minecraft.command.argument.Vec3ArgumentType
 import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.text.Text
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import top.htext.kotreen.KotreenSetting
@@ -134,138 +133,99 @@ object ArrangeCommand {
     private fun createArrangement(context: CommandContext<ServerCommandSource>): Int {
         val player = context.source.player ?: return 0
         val name = StringArgumentType.getString(context, "arrange")
-        val desc = "There is no description."
+        val desc = "."
         val pos = player.pos.toList()
         val rot = player.rotationClient.toList()
         val flying = !player.isOnGround
         val gameMode = player.interactionManager.gameMode.name
         val dimension = player.world.registryKey.value.toString()
-
-        if (ArrangementCache.getArrangement(name) != null) {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.existed"))
-            return 0
-        }
-
         val arrangement = Arrangement(name, desc, pos, rot, gameMode, flying, dimension, ArrayList())
-        ArrangementCache.createArrangement(arrangement)
-        return 1
+
+        return if (ArrangementCache.createArrangement(arrangement, context.source)) 1 else 0
     }
 
     private fun removeArrangement(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        if (ArrangementCache.removeArrangement(name)) return 1
-        context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-        return 0
+
+        return if (ArrangementCache.removeArrangement(name, context.source)) 1 else 0
     }
 
     private fun spawnArrangement(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
-        if (arrangement.spawn(context.source.server)) return 1
-        context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.online"))
-        return 0
+
+        return ArrangementCache.getArrangement(name, context.source)?.spawn(context.source) ?: 0
     }
 
     private fun killArrangement(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
-        if (arrangement.kill(context.source.server)) return 1
-        context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.offline"))
-        return 0
+
+        return ArrangementCache.getArrangement(name, context.source)?.kill(context.source) ?: 0
     }
 
     private fun actionArrangement(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
-        if (arrangement.action(context.source.server)) return 1
-        context.source.sendError(Text.translatable("kotreen.command.failure.action"))
-        return 0
+
+        return ArrangementCache.getArrangement(name, context.source)?.action(context.source) ?: 0
     }
 
     private fun stopArrangement(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
-        if (arrangement.stop(context.source.server)) return 1
-        context.source.sendError(Text.translatable("kotreen.command.failure.action"))
-        return 0
+
+        return ArrangementCache.getArrangement(name, context.source)?.stop(context.source) ?: 0
     }
 
     private fun modifyDescription(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val arrangement = ArrangementCache.getArrangement(name, context.source) ?: return 0
         val description = StringArgumentType.getString(context, "description")
+
         arrangement.desc = description
         return 1
     }
 
     private fun modifyActionAppend(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val arrangement = ArrangementCache.getArrangement(name, context.source) ?: return 0
         val action = StringArgumentType.getString(context, "action")
+
         arrangement.actions.add(action)
         return 1
     }
 
     private fun modifyActionPrepare(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val arrangement = ArrangementCache.getArrangement(name, context.source) ?: return 0
         val action = StringArgumentType.getString(context, "action")
+
         arrangement.actions.add(0, action)
         return 1
     }
 
     private fun modifyActionAfter(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val arrangement = ArrangementCache.getArrangement(name, context.source) ?: return 0
         val former = IntegerArgumentType.getInteger(context, "former")
         val latter = StringArgumentType.getString(context, "latter")
+
         arrangement.actions.add(former + 1, latter)
         return 1
     }
 
     private fun modifyActionRemove(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val arrangement = ArrangementCache.getArrangement(name, context.source) ?: return 0
         val index = IntegerArgumentType.getInteger(context, "index")
+
         arrangement.actions.removeAt(index)
         return 1
     }
 
     private fun modifyActionOverwrite(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val arrangement = ArrangementCache.getArrangement(name, context.source) ?: return 0
         val index = IntegerArgumentType.getInteger(context, "index")
         val action = StringArgumentType.getString(context, "action")
+
         arrangement.actions.removeAt(index)
         arrangement.actions.add(action)
         return 1
@@ -273,10 +233,8 @@ object ArrangeCommand {
 
     private fun modifyActionsClear(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val arrangement = ArrangementCache.getArrangement(name, context.source) ?: return 0
+
         arrangement.actions.removeAll(arrangement.actions.toSet())
         return 1
     }
@@ -284,21 +242,17 @@ object ArrangeCommand {
     private fun modifyPositionHere(context: CommandContext<ServerCommandSource>): Int {
         val player = context.source.player ?: return 0
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val arrangement = ArrangementCache.getArrangement(name, context.source) ?: return 0
+
         arrangement.pos = player.pos.toList()
         return 1
     }
 
     private fun modifyPositionAt(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val arrangement = ArrangementCache.getArrangement(name, context.source) ?: return 0
         val pos = Vec3ArgumentType.getVec3(context, "position")
+
         arrangement.pos = pos.toList()
         return 1
     }
@@ -306,21 +260,17 @@ object ArrangeCommand {
     private fun modifyRotationHere(context: CommandContext<ServerCommandSource>): Int {
         val player = context.source.player ?: return 0
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val arrangement = ArrangementCache.getArrangement(name, context.source) ?: return 0
+
         arrangement.rot = player.rotationClient.toList()
         return 1
     }
 
     private fun modifyRotationAt(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "arrange")
-        val arrangement = ArrangementCache.getArrangement(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val arrangement = ArrangementCache.getArrangement(name, context.source) ?: return 0
         val rot = Vec2ArgumentType.getVec2(context, "rotation")
+
         arrangement.rot = rot.toList()
         return 1
     }

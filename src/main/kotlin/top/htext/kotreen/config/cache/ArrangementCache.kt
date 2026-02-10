@@ -4,6 +4,8 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import net.minecraft.server.MinecraftServer
+import net.minecraft.server.command.ServerCommandSource
+import net.minecraft.text.Text
 import top.htext.kotreen.Kotreen.LOGGER
 import top.htext.kotreen.config.Arrangement
 import top.htext.kotreen.utils.ServerUtils
@@ -46,6 +48,8 @@ object ArrangementCache {
         return cache
     }
 
+
+
     fun getArrangement(name: String): Arrangement? {
         try { return cache.first { name == it.name } }
         catch (_: NoSuchElementException) { }
@@ -60,5 +64,26 @@ object ArrangementCache {
     fun removeArrangement(name: String): Boolean {
         dirty = true
         return cache.removeIf { it.name == name }
+    }
+
+    fun getArrangement(name: String, source: ServerCommandSource): Arrangement? {
+        val result = getArrangement(name)
+        if (result == null) {
+            source.sendError(Text.translatable("kotreen.command.failure.arrangement.null", name))
+            return null
+        }
+        return result
+    }
+
+    fun createArrangement(arrangement: Arrangement, source: ServerCommandSource): Boolean {
+        val isCreated = createArrangement(arrangement)
+        if (!isCreated) source.sendError(Text.translatable("kotreen.command.failure.arrangement.existed", arrangement.name))
+        return isCreated
+    }
+
+    fun removeArrangement(name: String, source: ServerCommandSource): Boolean {
+        val isRemoved = removeArrangement(name)
+        if (!isRemoved) source.sendError(Text.translatable("kotreen.command.failure.arrangement.null", name))
+        return isRemoved
     }
 }

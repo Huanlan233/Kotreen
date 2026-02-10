@@ -9,15 +9,12 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.text.Text
 import top.htext.kotreen.KotreenSetting
 import top.htext.kotreen.command.suggestion.ArrangementListSuggestionProvider
 import top.htext.kotreen.command.suggestion.ArrangementSuggestionProvider
 import top.htext.kotreen.command.suggestion.SeriesArrangementSuggestionProvider
 import top.htext.kotreen.command.suggestion.SeriesSuggestionProvider
-import top.htext.kotreen.config.Arrangement
 import top.htext.kotreen.config.Series
-import top.htext.kotreen.config.cache.ArrangementCache
 import top.htext.kotreen.config.cache.SeriesCache
 
 object SeriesCommand {
@@ -89,118 +86,78 @@ object SeriesCommand {
 
     private fun createSeries(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "series")
-        val desc = "There is no description."
+        val desc = ""
         val series = Series(name, desc, HashSet())
-        if (SeriesCache.createSeries(series)) return 1
-        context.source.sendError(Text.translatable("kotreen.command.failure.series.existed"))
-        return 0
+
+        return if (SeriesCache.createSeries(series, context.source)) 1 else 0
     }
 
     private fun createSeriesWithArrangements(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "series")
-        val desc = "There is no description."
-        val arrangementNames = StringArgumentType.getString(context, "arrangements").split(" ").toHashSet()
-        val arrangements = HashSet<Arrangement>()
-        arrangementNames.forEach {
-            ArrangementCache.getArrangement(it)?.let { e -> arrangements.add(e) }
-        }
-
+        val desc = ""
+        val arrangements = StringArgumentType.getString(context, "arrangements").split(" ").toHashSet()
         val series = Series(name, desc, arrangements)
-        if (SeriesCache.createSeries(series)) return 1
-        context.source.sendError(Text.translatable("kotreen.command.failure.series.existed"))
-        return 0
+
+        return if (SeriesCache.createSeries(series, context.source)) 1 else 0
     }
 
     private fun removeSeries(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "series")
-        if (SeriesCache.removeSeries(name)) return 1
-        context.source.sendError(Text.translatable("kotreen.command.failure.series.null"))
-        return 0
+
+        return if (SeriesCache.removeSeries(name, context.source)) 1 else 0
     }
 
     private fun spawnSeries(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "series")
-        val series = SeriesCache.getSeries(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.series.null"))
-            return 0
-        }
-        return series.spawn(context.source.server)
+        return SeriesCache.getSeries(name, context.source)?.spawn(context.source) ?: 0
     }
 
     private fun killSeries(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "series")
-        val series = SeriesCache.getSeries(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.series.null"))
-            return 0
-        }
-        return series.kill(context.source.server)
+
+        return SeriesCache.getSeries(name, context.source)?.kill(context.source) ?: 0
     }
 
     private fun actionSeries(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "series")
-        val series = SeriesCache.getSeries(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.series.null"))
-            return 0
-        }
-        return series.action(context.source.server)
+        return SeriesCache.getSeries(name, context.source)?.action(context.source) ?: 0
     }
 
     private fun stopSeries(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "series")
-        val series = SeriesCache.getSeries(name) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.series.null"))
-            return 0
-        }
-        return series.stop(context.source.server)
+        return SeriesCache.getSeries(name, context.source)?.stop(context.source) ?: 0
     }
 
     private fun modifyDescription(context: CommandContext<ServerCommandSource>): Int {
         val seriesName = StringArgumentType.getString(context, "series")
-        val series = SeriesCache.getSeries(seriesName) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.series.null"))
-            return 0
-        }
+        val series = SeriesCache.getSeries(seriesName, context.source) ?: return 0
         val description = StringArgumentType.getString(context, "description")
+
         series.desc = description
         return 1
     }
 
     private fun modifyArrangementAdd(context: CommandContext<ServerCommandSource>): Int {
         val seriesName = StringArgumentType.getString(context, "series")
-        val series = SeriesCache.getSeries(seriesName) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.series.null"))
-            return 0
-        }
-        val arrangementName = StringArgumentType.getString(context, "arrangement")
-        val arrangement = ArrangementCache.getArrangement(arrangementName) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val series = SeriesCache.getSeries(seriesName, context.source) ?: return 0
+        val arrangement = StringArgumentType.getString(context, "arrangement")
+
         series.arrangements.add(arrangement)
         return 1
     }
 
     private fun modifyArrangementRemove(context: CommandContext<ServerCommandSource>): Int {
         val seriesName = StringArgumentType.getString(context, "series")
-        val series = SeriesCache.getSeries(seriesName) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.series.null"))
-            return 0
-        }
-        val arrangementName = StringArgumentType.getString(context, "arrangement")
-        val arrangement = ArrangementCache.getArrangement(arrangementName) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
-            return 0
-        }
+        val series = SeriesCache.getSeries(seriesName, context.source) ?: return 0
+        val arrangement = StringArgumentType.getString(context, "arrangement")
+
         series.arrangements.remove(arrangement)
         return 1
     }
 
     private fun modifyArrangementsClear(context: CommandContext<ServerCommandSource>): Int {
         val seriesName = StringArgumentType.getString(context, "series")
-        val series = SeriesCache.getSeries(seriesName) ?: run {
-            context.source.sendError(Text.translatable("kotreen.command.failure.series.null"))
-            return 0
-        }
+        val series = SeriesCache.getSeries(seriesName, context.source) ?: return 0
         series.arrangements.removeAll(series.arrangements)
         return 1
     }
