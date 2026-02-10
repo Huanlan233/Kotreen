@@ -39,7 +39,7 @@ data class Arrangement(
             RegistryKey.of(RegistryKeys.WORLD, Identifier(dimension)),
             GameMode.valueOf(gameMode),
             flying
-            //#if mcVersion >= 12002
+            //#if mcVersion == 12002
             //$$ ,{}
             //#endif
         )

@@ -71,7 +71,6 @@ if (mcVersion >= 11700) {
 } else {
     JAVA_COMPATIBILITY = JavaVersion.VERSION_1_8
 }
-int JAVA_INT = JAVA_COMPATIBILITY.toString().toInteger()
 
 java {
     withSourcesJar()
@@ -80,7 +79,7 @@ java {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = JAVA_INT
+    it.options.release = 21
     it.options.encoding = "UTF-8"
 }
 
