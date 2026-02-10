@@ -4,6 +4,8 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import net.minecraft.server.MinecraftServer
+import net.minecraft.server.command.ServerCommandSource
+import net.minecraft.text.Text
 import top.htext.kotreen.Kotreen.LOGGER
 import top.htext.kotreen.config.Series
 import top.htext.kotreen.utils.ServerUtils
@@ -59,5 +61,26 @@ object SeriesCache {
     fun removeSeries(name: String): Boolean {
         dirty = true
         return cache.removeIf { it.name == name }
+    }
+
+    fun getSeries(name: String, source: ServerCommandSource): Series? {
+        val result = getSeries(name)
+        if (result == null) {
+            source.sendError(Text.translatable("kotreen.command.failure.series.null"))
+            return null
+        }
+        return result
+    }
+
+    fun createSeries(series: Series, source: ServerCommandSource): Boolean {
+        val isCreated = createSeries(series)
+        if (!isCreated) source.sendError(Text.translatable("kotreen.command.failure.series.existed"))
+        return isCreated
+    }
+
+    fun removeSeries(name: String, source: ServerCommandSource): Boolean {
+        val isRemoved = removeSeries(name)
+        if (!isRemoved) source.sendError(Text.translatable("kotreen.command.failure.series.null"))
+        return isRemoved
     }
 }
