@@ -21,9 +21,10 @@ jobs:
         with:
           java-version: '21'
           distribution: 'microsoft'
-      - name: make gradle wrapper executable
 
+      - name: make gradle wrapper executable
         run: chmod +x ./gradlew
+
       - name: build
         run: ./gradlew build
 
@@ -31,8 +32,11 @@ jobs:
         run : |
           shopt -s extglob
           mkdir jars
-          for jar in versions/*/build/libs/!(*-@(dev|sources|shadow)).jar; do
-              cp -p "$jar" jars/
+          for ver in versions/*/; do
+            ver_name = ${ver%/}
+            for jar in versions/${ver_name}/build/libs/!(*-@(dev|sources|shadow)).jar; do
+              mv "$jar" "jars/${ver_name}-${jar}"
+            done
           done
           ls -l jars
         
