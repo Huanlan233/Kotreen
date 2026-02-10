@@ -4,9 +4,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import net.minecraft.server.MinecraftServer
 import top.htext.kotreen.Kotreen.LOGGER
-import top.htext.kotreen.config.Arrangement
 import top.htext.kotreen.config.Series
-import top.htext.kotreen.serialization.ArrangementAdapter
 import top.htext.kotreen.utils.ServerUtils
 import java.io.File
 
@@ -14,7 +12,6 @@ object SeriesCache {
     private val cache = HashSet<Series>()
     private var dirty = false
     private val gson = GsonBuilder()
-        .registerTypeAdapter(Arrangement::class.java, ArrangementAdapter())
         .setPrettyPrinting()
         .disableHtmlEscaping()
         .create()
