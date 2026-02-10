@@ -69,7 +69,7 @@ object ArrangementCache {
     fun getArrangement(name: String, source: ServerCommandSource): Arrangement? {
         val result = getArrangement(name)
         if (result == null) {
-            source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
+            source.sendError(Text.translatable("kotreen.command.failure.arrangement.null", name))
             return null
         }
         return result
@@ -77,13 +77,13 @@ object ArrangementCache {
 
     fun createArrangement(arrangement: Arrangement, source: ServerCommandSource): Boolean {
         val isCreated = createArrangement(arrangement)
-        if (!isCreated) source.sendError(Text.translatable("kotreen.command.failure.arrangement.existed"))
+        if (!isCreated) source.sendError(Text.translatable("kotreen.command.failure.arrangement.existed", arrangement.name))
         return isCreated
     }
 
     fun removeArrangement(name: String, source: ServerCommandSource): Boolean {
         val isRemoved = removeArrangement(name)
-        if (!isRemoved) source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
+        if (!isRemoved) source.sendError(Text.translatable("kotreen.command.failure.arrangement.null", name))
         return isRemoved
     }
 }

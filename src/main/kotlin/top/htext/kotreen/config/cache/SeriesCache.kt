@@ -66,7 +66,7 @@ object SeriesCache {
     fun getSeries(name: String, source: ServerCommandSource): Series? {
         val result = getSeries(name)
         if (result == null) {
-            source.sendError(Text.translatable("kotreen.command.failure.series.null"))
+            source.sendError(Text.translatable("kotreen.command.failure.series.null", name))
             return null
         }
         return result
@@ -74,13 +74,13 @@ object SeriesCache {
 
     fun createSeries(series: Series, source: ServerCommandSource): Boolean {
         val isCreated = createSeries(series)
-        if (!isCreated) source.sendError(Text.translatable("kotreen.command.failure.series.existed"))
+        if (!isCreated) source.sendError(Text.translatable("kotreen.command.failure.series.existed", series.name))
         return isCreated
     }
 
     fun removeSeries(name: String, source: ServerCommandSource): Boolean {
         val isRemoved = removeSeries(name)
-        if (!isRemoved) source.sendError(Text.translatable("kotreen.command.failure.series.null"))
+        if (!isRemoved) source.sendError(Text.translatable("kotreen.command.failure.series.null", name))
         return isRemoved
     }
 }

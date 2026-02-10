@@ -21,7 +21,7 @@ data class Series(
     fun spawn(source: ServerCommandSource): Int {
         return arrangements.sumOf {
             ArrangementCache.getArrangement(it)?.spawn(source) ?: run {
-                source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
+                source.sendError(Text.translatable("kotreen.command.failure.arrangement.null", it))
                 0
             }
         }
@@ -30,7 +30,7 @@ data class Series(
     fun kill(source: ServerCommandSource): Int {
         return arrangements.sumOf {
             ArrangementCache.getArrangement(it)?.kill(source) ?: run {
-                source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
+                source.sendError(Text.translatable("kotreen.command.failure.arrangement.null", it))
                 0
             }
         }
@@ -39,7 +39,7 @@ data class Series(
     fun action(source: ServerCommandSource): Int {
         return arrangements.sumOf {
             ArrangementCache.getArrangement(it)?.action(source) ?: run {
-                source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
+                source.sendError(Text.translatable("kotreen.command.failure.arrangement.null",it))
                 0
             }
         }
@@ -48,7 +48,7 @@ data class Series(
     fun stop(source: ServerCommandSource): Int {
         return arrangements.sumOf {
             ArrangementCache.getArrangement(it)?.stop(source) ?: run {
-                source.sendError(Text.translatable("kotreen.command.failure.arrangement.null"))
+                source.sendError(Text.translatable("kotreen.command.failure.arrangement.null", it))
                 0
             }
         }
