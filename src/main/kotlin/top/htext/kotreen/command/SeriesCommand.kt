@@ -9,15 +9,12 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.text.Text
 import top.htext.kotreen.KotreenSetting
 import top.htext.kotreen.command.suggestion.ArrangementListSuggestionProvider
 import top.htext.kotreen.command.suggestion.ArrangementSuggestionProvider
 import top.htext.kotreen.command.suggestion.SeriesArrangementSuggestionProvider
 import top.htext.kotreen.command.suggestion.SeriesSuggestionProvider
-import top.htext.kotreen.config.Arrangement
 import top.htext.kotreen.config.Series
-import top.htext.kotreen.config.cache.ArrangementCache
 import top.htext.kotreen.config.cache.SeriesCache
 
 object SeriesCommand {
@@ -123,7 +120,7 @@ object SeriesCommand {
 
     private fun actionSeries(context: CommandContext<ServerCommandSource>): Int {
         val name = StringArgumentType.getString(context, "series")
-        return SeriesCache.getSeries(name, context.source)?.kill(context.source) ?: 0
+        return SeriesCache.getSeries(name, context.source)?.action(context.source) ?: 0
     }
 
     private fun stopSeries(context: CommandContext<ServerCommandSource>): Int {

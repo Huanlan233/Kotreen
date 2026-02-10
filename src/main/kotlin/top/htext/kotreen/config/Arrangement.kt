@@ -5,7 +5,6 @@ import carpet.patches.EntityPlayerMPFake
 import com.google.gson.annotations.SerializedName
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
-import net.minecraft.server.MinecraftServer
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
