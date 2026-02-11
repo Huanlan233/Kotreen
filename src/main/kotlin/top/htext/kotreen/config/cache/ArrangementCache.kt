@@ -48,8 +48,6 @@ object ArrangementCache {
         return cache
     }
 
-
-
     fun getArrangement(name: String): Arrangement? {
         try { return cache.first { name == it.name } }
         catch (_: NoSuchElementException) { }
